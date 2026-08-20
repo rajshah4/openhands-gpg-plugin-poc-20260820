@@ -1,8 +1,8 @@
 {
   "hooks": {
-    "UserPromptSubmit": [
+    "PreToolUse": [
       {
-        "matcher": "*",
+        "matcher": "terminal",
         "hooks": [
           {
             "type": "command",
