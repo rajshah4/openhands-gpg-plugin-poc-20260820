@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$OPENHANDS_PLUGIN_ROOT/hooks/scripts/configure_gpg_signing.sh",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
