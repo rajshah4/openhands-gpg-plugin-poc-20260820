@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$OPENHANDS_PLUGIN_ROOT/hooks/scripts/configure_gpg_signing.sh",
+            "command": "set -eu\nLOG_FILE=/tmp/openhands_gpg_gated.log\ndeny() { reason=$1; printf '%s\\n' \"GPG signing setup failed: $reason\" >&2; exit 2; }\n[ -n \"${gpg_key:-}\" ] || deny \"stored gpg_key secret is unavailable\"\nexport GPG_TTY=/dev/null\nexport GNUPGHOME=\"${GNUPGHOME:-$HOME/.gnupg}\"\nmkdir -p \"$GNUPGHOME\"\nchmod 700 \"$GNUPGHOME\"\nif ! printf '%s' \"$gpg_key\" | gpg --batch --import >>\"$LOG_FILE\" 2>&1; then deny \"private-key import failed\"; fi\nKEY_ID=$(gpg --batch --with-colons --list-secret-keys 2>>\"$LOG_FILE\" | awk -F: '$1 == \"sec\" { want = 1; next } want && $1 == \"fpr\" { print $10; exit }')\n[ -n \"$KEY_ID\" ] || deny \"no secret signing key was found after import\"\ngit config --global user.signingkey \"$KEY_ID\"\ngit config --global commit.gpgsign true\ngit config --global tag.gpgsign true\ngit config --global gpg.program gpg\nprintf '%s\\n' \"[gpg-signer] signing configured for $KEY_ID\" >>\"$LOG_FILE\"\nexit 0",
             "timeout": 30
           }
         ]
