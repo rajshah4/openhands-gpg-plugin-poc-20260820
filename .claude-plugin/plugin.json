@@ -1,0 +1,1 @@
+{"name":"gpg-signer-gated","version":"0.1.0","description":"Configure GPG signing in a blocking UserPromptSubmit hook after stored secrets initialize","license":"MIT"}
